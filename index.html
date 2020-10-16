@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+  <title>SAZView, a JavaScript-based SAZ file viewer</title>
+  <script type="application/javascript" src="third_party/jszip/jszip.min.js"></script>
+  <script type="application/javascript" src="sazview.js"></script>
+  <link rel="stylesheet" href="sazview.css" />
+</head>
+<body>
+
+<div class="row-container">
+  <div class="first-row">
+   <input type=file id=inputFile accept=".saz" />
+   <button id=btnClear>Clear</button>
+  </div>
+  <iframe id=frameSessionList class="second-row" src="data:text/html,This is SAZView, a trivial viewer for Session Archive Zip (SAZ) files saved from Telerik Fiddler.<br /><br /><br /><center><i>Select a SAZ file to load it into this viewer</i></center>"></iframe>
+</div>
+</body>
+</html>
