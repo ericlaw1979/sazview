@@ -1,1 +1,7 @@
-tr:nth-child(odd) {background: #cff}
+/* This CSS is injected into the HTML index from the SAZ */
+thead {
+  background: #ddd
+}
+tr:nth-child(even) {
+  background: #cff
+}

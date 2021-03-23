@@ -1,0 +1,31 @@
+{
+  "short_name": "SAZView",
+  "name": "SAZView",
+  "icons": [
+    {
+      "src": "images/saz-file.png",
+      "type": "image/png",
+      "sizes": "128x128"
+    }
+  ],
+  "start_url": "index.html",
+  "background_color": "#3367D6",
+  "display": "standalone",
+  "scope": "/apps/sazview/",
+  "theme_color": "#3367D6",
+  "file_handlers": [
+    {
+      "action": "#open-saz",
+      "name": "Comma-separated Value",
+      "accept": {
+        "application/vnd.telerik-fiddler.SessionArchive": [ ".saz" ]
+      },
+      "icons": [
+        {
+          "src": "images/saz-file.png",
+          "sizes": "128x128"
+        }
+      ]
+    }
+  ]
+}
