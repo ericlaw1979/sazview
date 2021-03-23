@@ -128,11 +128,14 @@ document.addEventListener('DOMContentLoaded', function() {
   btnDemo.onclick = loadSampleData_;
 
   // Implement File Handling
+  // https://web.dev/file-handling/
   // https://github.com/WICG/file-system-access/blob/master/EXPLAINER.md
   if ('launchQueue' in window) {
+    console.log('FileHandlingAPI launchQueue was seen, set a consumer!');
     launchQueue.setConsumer(launchParams => {
-      if (!launchParams.files.length)
-        return;
+      console.log('FileHandlingAPI consumer invoked!');
+      if (!launchParams.files.length) return;
+      
       doLoadFile(launchParams.files[0]);
     });
 }

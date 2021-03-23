@@ -8,6 +8,11 @@
   <script type="application/javascript" src="third_party/jszip/jszip.min.js"></script>
   <script type="application/javascript" src="sazview.js"></script>
   <link rel="stylesheet" href="sazview.css" />
+  <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+  }
+  </script>
 </head>
 <body>
 
