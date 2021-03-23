@@ -2,6 +2,7 @@
 
 let inputFile_;
 let btnClear_;
+let btnDemo_;
 let frameSessionList_;
 const zip = new JSZip();
 
@@ -16,13 +17,32 @@ function inputFileChanged() {
   doLoadFile(inputFile_.files[0]);
 }
 
+
+function navSessionList_(url) {
+  // We don't want the user to be able to accidentally "unload"
+  // the SessionList frame by hitting back.
+  frameSessionList_.contentWindow.location.replace(url);
+}
+
+function loadSampleData_() {
+  navSessionList_("data:text/html,Fetching sample data...");
+  fetch('example.saz.zip')
+  .then(response => response.blob())
+  .then(blob => {
+      let sazFile = new File([blob], "example.saz", {type: "application/vnd.telerik-fiddler.SessionArchive"});
+      let adapter = { "target": {"result": sazFile}};
+      onLoadBytes(adapter);
+    });
+}
+
 function btnClearClick() {
   inputFile_.value = '';
   document.title = "SAZView";
-  frameSessionList_.src = "data:text/html,<i>Select a SAZ file to load it into this viewer</i>";
+  navSessionList_("data:text/html,<i>Select a SAZ file to load it into this viewer</i>");
 }
 
 function onLoadBytes(data) {
+  navSessionList_("data:text/html,Loading SAZ...");
   zip.loadAsync(data.target.result).then(zip => {
     if (!zip.files['_index.htm']) {
       alert('The selected SAZ file lacks an index. Maybe it was captured from FiddlerCore? Sorry.');
@@ -31,8 +51,11 @@ function onLoadBytes(data) {
     zip.files['_index.htm'].async('string').then(content => {
       // Inject fixup references into the SessionList loaded from the SAZ.
       content=content.replace('</head>', '<script type="application/javascript" src="' + new URL('sessionlist.js', document.location.href) + '"></script><link rel="stylesheet" href="' + new URL('sessionlist.css', document.location.href) + '" /></head>');
+      content=content.replaceAll('_c.txt\'>C</a>&nbsp;', '_c.txt\'>Request</a><br />');
+      content=content.replaceAll('_s.txt\'>S</a>&nbsp;', '_s.txt\'>Response</a><br />');
+      content=content.replaceAll('_m.xml\'>M</a>', '_m.xml\'>Metadata</a>');
       var blob = new Blob( [content], { type: 'text/html; charset=utf-8'} );
-      frameSessionList_.src=window.URL.createObjectURL(blob);
+      navSessionList_(window.URL.createObjectURL(blob));
       });
     })
     .catch(e => {
@@ -40,6 +63,7 @@ function onLoadBytes(data) {
       this.inputFile_.value = null;
     });
 }
+
 
 // hack, remove this!
 // https://stackoverflow.com/questions/14147213/search-for-multi-byte-pattern-in-uint8array
@@ -62,7 +86,7 @@ Uint8Array.prototype.indexOfMulti = function(searchElements, fromIndex) {
     return(i === index + searchElements.length) ? index : -1;
 };
 
-// hack
+// hack 
 function findEndOfHeaders(data) {
   return data.indexOfMulti([0x0a,0x0d,0x0a]);
 }
@@ -81,7 +105,7 @@ function doInspect(sItem) {
       // https://www.html5rocks.com/en/tutorials/webgl/typed_arrays/
       /*const uint8 = new Uint8Array([10, 20, 30, 40, 50]);
       const array1 = uint8.slice(1, 3);
-      var uint8array = new TextEncoder("utf-8").encode("ï¿½");
+      var uint8array = new TextEncoder("utf-8").encode("¢");
       var string = new TextDecoder("utf-8").decode(uint8array);
 */
     });
@@ -93,12 +117,15 @@ window.addEventListener('message', (e) => {
   if (e.data.op === 'inspect') doInspect(e.data.item);
 }, false);
 
+
 document.addEventListener('DOMContentLoaded', function() {
   frameSessionList_ = document.getElementById("frameSessionList");
   inputFile_ = document.getElementById('inputFile');
-  inputFile_.onchange = inputFileChanged;
-  btnClear_ = document.getElementById('btnClear');
+  inputFile_.onchange = inputFileChanged; 
+  btnClear_ = document.getElementById('btnClear'); 
   btnClear.onclick = btnClearClick;
+  btnDemo_ = document.getElementById('btnDemo');
+  btnDemo.onclick = loadSampleData_;
 
   // Implement File Handling
   // https://github.com/WICG/file-system-access/blob/master/EXPLAINER.md

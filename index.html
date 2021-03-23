@@ -1,18 +1,30 @@
 <!doctype html>
 <html>
 <head>
-    <title>SAZView, a JavaScript-based SAZ file viewer</title>
-    <link rel="manifest" href="manifest.json">
-    <script type="application/javascript" src="third_party/jszip/jszip.min.js"></script>
-    <script type="application/javascript" src="sazview.js"></script>
-    <link rel="stylesheet" href="sazview.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SAZView, a JavaScript-based SAZ file viewer</title>
+  <link rel="manifest" href="manifest.json">
+  <script type="application/javascript" src="third_party/jszip/jszip.min.js"></script>
+  <script type="application/javascript" src="sazview.js"></script>
+  <link rel="stylesheet" href="sazview.css" />
 </head>
 <body>
 
 <div class="row-container">
   <div class="first-row">
+   <span class="dropdown">
+    <button class="dropbtn">☰</button>
+    <div class="dropdown-content">
+    <a target="_blank" href="https://github.com/ericlaw1979/sazview">Source on Github</a>
+    <a target="_blank" href="https://fiddlerbook.com/">Fiddler Book</a>
+    <a target="_blank" href="https://twitter.com/ericlaw/">@ericlaw</a>
+    </div>
+    </span>
    <input type=file id=inputFile accept=".saz" />
+   <button id=btnDemo>{Load Example Data}</button>
    <button id=btnClear>Clear</button>
+
   </div>
   <iframe id=frameSessionList class="second-row" src="data:text/html,This is SAZView, a trivial viewer for Session Archive Zip (SAZ) files saved from Telerik Fiddler.<br /><br /><br /><center><i>Select a SAZ file to load it into this viewer</i></center>"></iframe>
 </div>
